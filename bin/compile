@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+BUILD_DIR=$1
+CACHE_DIR=$2
+BIN=whisper.cpp
+
+
+if [ ! -f $CACHE_DIR/$BIN ]; then
+	echo "No $BIN found in cache ($CACHE_DIR). Rebuilding"
+	git clone https://github.com/ggerganov/whisper.cpp
+	cd whisper.cpp
+	make
+	cp main $CACHE_DIR/$BIN
+fi
+
+cp $CACHE_DIR/$BIN $BUILD_DIR/bin
